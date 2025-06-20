@@ -78,34 +78,6 @@ BEGIN
 END //
 DELIMITER ;
 
--- 客戶價值分析函數
-DELIMITER //
-CREATE FUNCTION GetCustomerLevel(p_CustomerID INT) 
-RETURNS VARCHAR(20)
-READS SQL DATA
-DETERMINISTIC
-BEGIN
-    DECLARE v_TotalPurchase DECIMAL(12,2);
-    DECLARE v_Level VARCHAR(20);
-    
-    SELECT COALESCE(SUM(TotalAmount), 0) INTO v_TotalPurchase
-    FROM Orders 
-    WHERE CustomerID = p_CustomerID AND Status IN ('completed', 'shipped');
-    
-    IF v_TotalPurchase >= 100000 THEN
-        SET v_Level = 'VIP';
-    ELSEIF v_TotalPurchase >= 50000 THEN
-        SET v_Level = 'Gold';
-    ELSEIF v_TotalPurchase >= 20000 THEN
-        SET v_Level = 'Silver';
-    ELSE
-        SET v_Level = 'Bronze';
-    END IF;
-    
-    RETURN v_Level;
-END //
-DELIMITER ;
-
 -- 自動更新訂單總額觸發器
 DELIMITER //
 CREATE TRIGGER UpdateOrderTotal

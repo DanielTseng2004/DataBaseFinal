@@ -4,14 +4,8 @@ SELECT * FROM MonthlyS;
 -- 2. 庫存安全量查詢
 SELECT * FROM LowStockAlert;
 
--- 3. 客戶訂單分析
-SELECT 
-    ca.*,
-    GetCustomerLevel(ca.CustomerID) as CustomerLevel
-FROM CustomerAnalysis ca
-ORDER BY ca.TotalPurchase DESC;
 
--- 4. 產品銷售排行
+-- 3. 產品銷售排行
 SELECT 
     p.ProductName,
     SUM(od.Quantity) as TotalSold,
@@ -24,7 +18,7 @@ WHERE o.Status IN ('completed', 'shipped')
 GROUP BY p.ProductID, p.ProductName
 ORDER BY TotalRevenue DESC;
 
--- 5. 供應商採購分析
+-- 4. 供應商採購分析
 SELECT 
     s.SupplierName,
     COUNT(pr.PurchaseID) as PurchaseCount,
